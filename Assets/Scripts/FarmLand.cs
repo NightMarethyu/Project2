@@ -4,15 +4,20 @@ using UnityEngine;
 
 public class FarmLand : Building
 {
-    // Start is called before the first frame update
-    void Start()
+    public override int ResourceGeneration => 10;
+
+    public override string ResourceType => "food";
+
+    public override int buildCost => 25;
+
+    private void Start()
     {
-        
+        buildingName = "Farm Land";
     }
 
-    // Update is called once per frame
-    void Update()
+    public override void GenerateResources()
     {
-        
+        GameManager.Instance.AddResource(ResourceType, ResourceGeneration);
     }
+
 }

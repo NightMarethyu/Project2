@@ -4,15 +4,11 @@ using UnityEngine;
 
 public abstract class Building : MonoBehaviour
 {
-    // Start is called before the first frame update
-    void Start()
-    {
-        
-    }
+    protected string buildingName;
+    public abstract int buildCost { get; }
+    public abstract int ResourceGeneration { get; }
+    public abstract string ResourceType { get; }
 
-    // Update is called once per frame
-    void Update()
-    {
-        
-    }
+    public abstract void GenerateResources();
+
 }

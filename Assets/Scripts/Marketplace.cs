@@ -4,15 +4,19 @@ using UnityEngine;
 
 public class Marketplace : Building
 {
-    // Start is called before the first frame update
-    void Start()
+    public override int ResourceGeneration => 10;
+
+    public override string ResourceType => "gold";
+
+    public override int buildCost => 50;
+
+    private void Start()
     {
-        
+        buildingName = "Marketplace";
     }
 
-    // Update is called once per frame
-    void Update()
+    public override void GenerateResources()
     {
-        
+        GameManager.Instance.AddResource(ResourceType, ResourceGeneration);
     }
 }
