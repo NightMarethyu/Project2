@@ -1,0 +1,22 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: c6714ba8b7b539e49a389996a80543da, type: 3}
+  m_Name: Barbarian
+  m_EditorClassIdentifier: 
+  adventurerName: Thog Ironfist
+  minReward: 150
+  maxReward: 300
+  hireCost: 100
+  flavorText: Thog's fury in battle is matched only by his appetite for roasted boar.
+    His methods are brutal but effective; what he lacks in finesse, he makes up for
+    with raw strength. Just don't ask him about strategy.
+  adventurerPrefab: {fileID: 547481501683813555, guid: beaeaaf592f5ca644aee9e5f7d515fd3, type: 3}

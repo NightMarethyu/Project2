@@ -1,0 +1,9 @@
+<ui:UXML xmlns:ui="UnityEngine.UIElements" xmlns:uie="UnityEditor.UIElements" editor-extension-mode="False">
+    <Style src="project://database/Assets/UI%20Toolkit/buttonStyles.uss?fileID=7433441132597879392&amp;guid=12840197e10ee234c98fc89de28132a2&amp;type=3#buttonStyles" />
+    <ui:GroupBox style="height: 25%; width: 25%;">
+        <ui:Button text="Buy Farm Land" parse-escape-sequences="true" display-tooltip-when-elided="true" name="BuyFarmLand" tooltip="Add 1 Farm Land to your inventory and return to main game" class="button" />
+        <ui:Button text="Buy Marketplace" parse-escape-sequences="true" display-tooltip-when-elided="true" name="BuyMarketplace" tooltip="Add 1 Marketplace to your inventory and return to main game" class="button" />
+        <ui:Button text="Buy Village House" parse-escape-sequences="true" display-tooltip-when-elided="true" name="BuyHouse" tooltip="Add 1 Village house to your inventory and return to main game" class="button" />
+        <ui:Button text="Return to Main" parse-escape-sequences="true" display-tooltip-when-elided="true" name="ReturnToMain" tooltip="Go back to main game" class="button" />
+    </ui:GroupBox>
+</ui:UXML>

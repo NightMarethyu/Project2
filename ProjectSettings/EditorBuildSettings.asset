@@ -4,5 +4,14 @@
 EditorBuildSettings:
   m_ObjectHideFlags: 0
   serializedVersion: 2
-  m_Scenes: []
+  m_Scenes:
+  - enabled: 1
+    path: Assets/Scenes/Main Scene.unity
+    guid: 3c0024455c36d254097dbc36dbfb5c7c
+  - enabled: 1
+    path: Assets/Scenes/Carpenters Shop.unity
+    guid: ad28f28a45f31804f9169fd31e9fecef
+  - enabled: 1
+    path: Assets/Scenes/Guild Hall.unity
+    guid: 785800b6af339974f84918cca5894735
   m_configObjects: {}

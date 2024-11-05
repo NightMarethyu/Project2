@@ -4,19 +4,12 @@ using UnityEngine;
 
 public class Marketplace : Building
 {
+    public override string buildingName => Constants.Marketplace;
+
     public override int ResourceGeneration => 10;
 
-    public override string ResourceType => "gold";
+    public override string ResourceType => Constants.MarketResource;
 
     public override int buildCost => 50;
-
-    private void Start()
-    {
-        buildingName = "Marketplace";
-    }
-
-    public override void GenerateResources()
-    {
-        GameManager.Instance.AddResource(ResourceType, ResourceGeneration);
-    }
+    protected override int populationNeeded => 1;
 }

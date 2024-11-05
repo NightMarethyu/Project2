@@ -4,11 +4,32 @@ using UnityEngine;
 
 public abstract class Building : MonoBehaviour
 {
-    protected string buildingName;
-    public abstract int buildCost { get; }
-    public abstract int ResourceGeneration { get; }
-    public abstract string ResourceType { get; }
+    public virtual string buildingName { get; }
+    public virtual int buildCost { get; }
+    public virtual int ResourceGeneration { get; }
+    public virtual string ResourceType { get; }
+    public int populationUsed { get; protected set; }
+    protected virtual int populationNeeded { get; }
 
-    public abstract void GenerateResources();
+    public virtual void GenerateResources()
+    {
+        if (populationUsed == populationNeeded)
+        {
+            GameManager.Instance.AddResource(ResourceType, ResourceGeneration);
+        }
+        else
+        {
+            int populationAvailable = GameManager.Instance.population - GameManager.Instance.populationUsed;
+            if (populationAvailable >= populationNeeded)
+            {
+                GameManager.Instance.populationUsed += populationNeeded;
+                populationUsed += populationNeeded;
+            } else if (populationAvailable > 0)
+            {
+                populationUsed += populationAvailable;
+                GameManager.Instance.populationUsed -= populationAvailable;
+            }
+        }
+    }
 
 }

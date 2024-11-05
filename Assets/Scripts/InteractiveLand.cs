@@ -28,18 +28,12 @@ public class InteractiveLand : MonoBehaviour
         }
     }
 
-    // Update is called once per frame
-    void Update()
-    {
-        
-    }
-
     public void PlaceBuilding(Building building)
     {
         if (isOccupied) return;
 
         placedBuilding = Instantiate(building, gameObject.transform.position, Quaternion.identity);
-        GameManager.Instance.placedBuildings.Add(placedBuilding);
+        GameManager.Instance.AddBuilding(placedBuilding);
         isOccupied = true;
     }
 
@@ -49,12 +43,16 @@ public class InteractiveLand : MonoBehaviour
 
         isOccupied = false;
         GameManager.Instance.placedBuildings.Remove(placedBuilding);
+        GameManager.Instance.placedBuildings.Remove(placedBuilding);
         Destroy(placedBuilding);
     }
 
     private void OnMouseEnter()
     {
-        _renderer.material.color = Color.yellow;
+        if (!isOccupied)
+        {
+            _renderer.material.color = Color.yellow;
+        }
     }
 
     private void OnMouseExit()

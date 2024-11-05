@@ -9,9 +9,12 @@ public class GameManager : MonoBehaviour
     
     public int gold;
     public int food;
+    public int population;
+    public int populationUsed;
 
     public Building buildingToPlace;
     public List<Building> placedBuildings;
+    public List<BuildingData> buildings;
     private int turnCount;
 
     private void Awake()
@@ -44,16 +47,25 @@ public class GameManager : MonoBehaviour
 
     public void AddResource(string type, int amount)
     {
-        if (type == "gold")
+        switch (type)
         {
-            gold += amount;
-        } else if (type == "food")
-        {
-            food += amount;
-        } else
-        {
-            Debug.LogWarning("type must be either gold or food");
+            case Constants.Gold:
+                gold += amount;
+                break;
+
+            case Constants.Food:
+                food += amount;
+                break;
+
+            case Constants.Population:
+                population += amount;
+                break;
+
+            default:
+                Debug.LogWarning("type must be either gold, food, or population");
+                break;
         }
+
     }
 
     public void EndTurn()
@@ -71,5 +83,33 @@ public class GameManager : MonoBehaviour
     public void LoadScene(string sceneName)
     {
         SceneManager.LoadScene(sceneName);
+    }
+
+    public void AddBuilding(Building building)
+    {
+        placedBuildings.Add(building);
+        BuildingData newBuilding = new BuildingData(building.buildingName, building.gameObject.transform.position, Quaternion.identity);
+        buildings.Add(newBuilding);
+    }
+
+    public void ClearBuildings()
+    {
+        buildings.Clear();
+        placedBuildings.Clear();
+    }
+
+    [System.Serializable]
+    public class BuildingData
+    {
+        public string buildingType;
+        public Vector3 position;
+        public Quaternion rotation;
+
+        public BuildingData(string type, Vector3 pos, Quaternion rot)
+        {
+            buildingType = type;
+            position = pos;
+            rotation = rot;
+        }
     }
 }

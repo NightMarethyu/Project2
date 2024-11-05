@@ -6,18 +6,12 @@ public class FarmLand : Building
 {
     public override int ResourceGeneration => 10;
 
-    public override string ResourceType => "food";
+    public override string ResourceType => Constants.FarmResource;
 
     public override int buildCost => 25;
 
-    private void Start()
-    {
-        buildingName = "Farm Land";
-    }
+    public override string buildingName => Constants.FarmLand;
+    protected override int populationNeeded => 2;
 
-    public override void GenerateResources()
-    {
-        GameManager.Instance.AddResource(ResourceType, ResourceGeneration);
-    }
 
 }

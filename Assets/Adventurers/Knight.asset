@@ -1,0 +1,22 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: c6714ba8b7b539e49a389996a80543da, type: 3}
+  m_Name: Knight
+  m_EditorClassIdentifier: 
+  adventurerName: Sir Cedric Gallant
+  minReward: 200
+  maxReward: 400
+  hireCost: 120
+  flavorText: Chivalrous and steadfast, Sir Cedric lives by a code of honor. He is
+    known for his loyalty and noble heart but has a strict rule against taking shortcuts.
+    Reliable in battle, Cedric fights for justice, glory, and occasionally, coin.
+  adventurerPrefab: {fileID: 7498130571547991622, guid: 48b0fd46bacd15c49850fc764ff38881, type: 3}

@@ -2,17 +2,20 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-public class VillageHouse : MonoBehaviour
+public class VillageHouse : Building
 {
-    // Start is called before the first frame update
-    void Start()
-    {
-        
-    }
+    public override string buildingName => Constants.House;
+    public override string ResourceType => Constants.Population;
+    private int maxOccupancy = 4;
+    private int currentOccupancy;
 
-    // Update is called once per frame
-    void Update()
+    public override void GenerateResources()
     {
-        
+        if (currentOccupancy > maxOccupancy)
+        {
+            int moveIn = Random.Range(0, (maxOccupancy - currentOccupancy));
+            currentOccupancy += moveIn;
+            GameManager.Instance.population += moveIn;
+        }
     }
 }
