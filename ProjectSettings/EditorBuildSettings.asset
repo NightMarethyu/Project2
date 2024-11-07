@@ -6,6 +6,9 @@ EditorBuildSettings:
   serializedVersion: 2
   m_Scenes:
   - enabled: 1
+    path: Assets/Scenes/Opening Menu.unity
+    guid: eaa4166e541535a459ebcdf21eff7734
+  - enabled: 1
     path: Assets/Scenes/Main Scene.unity
     guid: 3c0024455c36d254097dbc36dbfb5c7c
   - enabled: 1
@@ -14,4 +17,7 @@ EditorBuildSettings:
   - enabled: 1
     path: Assets/Scenes/Guild Hall.unity
     guid: 785800b6af339974f84918cca5894735
+  - enabled: 1
+    path: Assets/Scenes/Closing Scene.unity
+    guid: 910bb56022c233c4399f43869945d404
   m_configObjects: {}

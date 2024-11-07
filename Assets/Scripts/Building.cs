@@ -24,12 +24,22 @@ public abstract class Building : MonoBehaviour
             {
                 GameManager.Instance.populationUsed += populationNeeded;
                 populationUsed += populationNeeded;
+                GameManager.Instance.AddResource(ResourceType, ResourceGeneration);
             } else if (populationAvailable > 0)
             {
                 populationUsed += populationAvailable;
                 GameManager.Instance.populationUsed -= populationAvailable;
             }
         }
+    }
+
+    public virtual int AdjustPopulationAfterFoodShortage(int remainingPopulation)
+    {
+        if (populationUsed > remainingPopulation)
+        {
+            populationUsed = remainingPopulation;
+        }
+        return populationUsed;
     }
 
 }

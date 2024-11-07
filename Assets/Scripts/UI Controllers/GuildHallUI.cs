@@ -11,10 +11,13 @@ public class GuildHallUI : MonoBehaviour
     public TextMeshProUGUI costText;
     public TextMeshProUGUI flavorText;
     public GameObject warningText;
+    public GameObject outOfActionsText;
+    public GameObject alreadySentAdventurer;
 
     public Button leftButton;
     public Button rightButton;
     public Button sendOnQuestButton;
+    public Button returnToMain;
 
     public GameObject AdventurerModelPosition;
 
@@ -30,6 +33,7 @@ public class GuildHallUI : MonoBehaviour
         leftButton.onClick.AddListener(() => ChangeAdventurer(-1));
         rightButton.onClick.AddListener(() => ChangeAdventurer(1));
         sendOnQuestButton.onClick.AddListener(SendOnQuest);
+        returnToMain.onClick.AddListener(ReturnToMain);
     }
 
     private void UpdateAdventurerDisplay()
@@ -65,8 +69,15 @@ public class GuildHallUI : MonoBehaviour
 
     private void SendOnQuest()
     {
+
+        if (TurnManager.Instance.hasSentAdventurer)
+        {
+            StartCoroutine(DisplayWarningText(alreadySentAdventurer));
+            return;
+        }
+
         Adventurer selectedAdventurer = adventurers[currentAdventurerIndex];
-        Debug.Log($"Adventurer {selectedAdventurer.adventurerName} is going on a quest!");
+        // Debug.Log($"Adventurer {selectedAdventurer.adventurerName} is going on a quest!");
 
         // Check if player has enough gold to hire the adventurer
         if (GameManager.Instance.gold < selectedAdventurer.hireCost)
@@ -74,16 +85,28 @@ public class GuildHallUI : MonoBehaviour
             Debug.LogWarning("Not enough gold to hire this adventurer!");
             StartCoroutine(DisplayWarningText(warningText));
             return;
+        } else if (TurnManager.Instance.actionsRemaining == 0)
+        {
+            Debug.LogWarning("You're out of actions for this turn");
+            StartCoroutine(DisplayWarningText(outOfActionsText));
+            return;
         }
 
         // Deduct hire cost from player's gold
         GameManager.Instance.gold -= selectedAdventurer.hireCost;
+        TurnManager.Instance.hasSentAdventurer = true;
+        TurnManager.Instance.UseAction();
 
         // Trigger the "Send On Quest" animation
         currentModel.GetComponent<Animator>().SetTrigger("Send On Quest");
 
         // Start the coroutine to simulate quest time and reward
         StartCoroutine(CompleteQuestAfterDelay(selectedAdventurer));
+    }
+
+    private void ReturnToMain()
+    {
+        GameManager.Instance.LoadScene("Main Scene");
     }
 
     // Coroutine for quest delay and reward calculation
@@ -95,19 +118,19 @@ public class GuildHallUI : MonoBehaviour
         // Calculate and add random reward to GameManager's gold
         int reward = Random.Range(adventurer.minReward, adventurer.maxReward + 1);
         GameManager.Instance.AddResource(Constants.Gold, reward);
-        Debug.Log($"Adventurer {adventurer.adventurerName} returned with {reward} gold!");
+        GameManager.Instance.message = $"Adventurer {adventurer.adventurerName} returned with {reward} gold!";
 
         // Load main scene after quest completion
-        GameManager.Instance.LoadScene("Main Scene"); // Replace with your main scene name
+        GameManager.Instance.LoadScene("Main Scene");
     }
 
     private IEnumerator DisplayWarningText(GameObject warning)
     {
-        warningText.SetActive(true);
+        warning.SetActive(true);
 
         yield return new WaitForSeconds(3f);
 
-        warningText.SetActive(false);
+        warning.SetActive(false);
     }
 
 }

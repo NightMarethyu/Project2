@@ -6,7 +6,7 @@ using UnityEngine.SceneManagement;
 public class GameManager : MonoBehaviour
 {
     public static GameManager Instance;
-    
+
     public int gold;
     public int food;
     public int population;
@@ -15,7 +15,11 @@ public class GameManager : MonoBehaviour
     public Building buildingToPlace;
     public List<Building> placedBuildings;
     public List<BuildingData> buildings;
-    private int turnCount;
+
+    public string message = null;
+
+    private const string HighScoreKey = "HighScore";
+    private const string GameSaveKey = "GameSave";
 
     private void Awake()
     {
@@ -70,14 +74,81 @@ public class GameManager : MonoBehaviour
 
     public void EndTurn()
     {
-        if (placedBuildings == null) return;
+        GenerateResources();
+        ProcessPopulationFoodConsumption();
+    }
 
-        foreach (Building build in placedBuildings)
+    public void EndGame()
+    {
+        float score = CalculateScore();
+        SaveScore(score);
+        SceneManager.LoadScene("Closing Scene");
+    }
+
+    public float CalculateScore()
+    {
+        if (population > 0)
         {
-            build.GenerateResources();
+            return (float)(gold + food) / population;
+        }
+        return 0;
+    }
+
+    private void GenerateResources()
+    {
+        foreach (Building building in placedBuildings)
+        {
+            building.GenerateResources();
+        }
+    }
+
+    private void ProcessPopulationFoodConsumption()
+    {
+        if (food >= population)
+        {
+            Debug.Log("There is enough food, everyone is fed");
+            food -= population;
+        } else
+        {
+            int populationLoss = population - food;
+            Debug.Log($"OH NO! There isn't enough food. {populationLoss} people have died");
+            food = 0;
+            population -= populationLoss;
+            population = Mathf.Max(population, 0);
+
+            if (population == 0)
+            {
+                EndGame();
+            }
+
+            AdjustBuildingPopulation();
         }
 
-        turnCount++;
+    }
+
+    private void AdjustBuildingPopulation()
+    {
+        Debug.Log("Food Shortage, adjusting population");
+        int totalPopulationUsed = 0;
+
+        foreach (var building in placedBuildings)
+        {
+            if (building is VillageHouse house)
+            {
+                totalPopulationUsed += house.AdjustPopulationAfterFoodShortage(totalPopulationUsed);
+            }
+        }
+
+        int remainingPopulation = population - totalPopulationUsed;
+        foreach (var building in placedBuildings)
+        {
+            if (!(building is VillageHouse))
+            {
+                remainingPopulation -= building.AdjustPopulationAfterFoodShortage(remainingPopulation);
+            }
+        }
+
+        populationUsed = population - remainingPopulation;
     }
 
     public void LoadScene(string sceneName)
@@ -111,5 +182,92 @@ public class GameManager : MonoBehaviour
             position = pos;
             rotation = rot;
         }
+    }
+
+    [System.Serializable]
+    public class BuildingDataWrapper
+    {
+        public List<GameManager.BuildingData> buildings;
+
+        public BuildingDataWrapper(List<GameManager.BuildingData> buildings)
+        {
+            this.buildings = buildings;
+        }
+    }
+
+    public List<float> GetHighScores()
+    {
+        List<float> highScores = new List<float>();
+        for (int i = 0; i < 5; i++)
+        {
+            float score = PlayerPrefs.GetFloat($"{HighScoreKey}_{i}", 0);
+            if (score > 0)
+            {
+                highScores.Add(score);
+            }
+        }
+        return highScores;
+    }
+
+    public void SaveScore(float score)
+    {
+        List<float> highScores = GetHighScores();
+        highScores.Add(score);
+        highScores.Sort((a, b) => b.CompareTo(a));
+
+        if (highScores.Count > 5)
+        {
+            highScores.RemoveAt(highScores.Count - 1);
+        }
+
+        for (int i = 0; i < highScores.Count; i++)
+        {
+            PlayerPrefs.SetFloat($"{HighScoreKey}_{i}", highScores[i]);
+        }
+
+        PlayerPrefs.Save();
+    }
+
+    public void SaveGameState()
+    {
+        PlayerPrefs.SetInt("Gold", gold);
+        PlayerPrefs.SetInt("Food", food);
+        PlayerPrefs.SetInt("Population", population);
+        PlayerPrefs.SetInt("PopulationUsed", populationUsed);
+
+        BuildingDataWrapper wrapper = new BuildingDataWrapper(buildings);
+        string buildingsJson = JsonUtility.ToJson(wrapper);
+        PlayerPrefs.SetString("Buildings", buildingsJson);
+        PlayerPrefs.SetInt("TurnCount", TurnManager.Instance.turnCount);
+
+        PlayerPrefs.SetInt(GameSaveKey, 1);
+        PlayerPrefs.Save();
+    }
+
+    public void LoadGameState()
+    {
+        if (PlayerPrefs.GetInt(GameSaveKey, 0) == 1)
+        {
+            gold = PlayerPrefs.GetInt("Gold");
+            food = PlayerPrefs.GetInt("Food");
+            population = PlayerPrefs.GetInt("Population");
+
+            string buildingsJson = PlayerPrefs.GetString("Buildings", "{}");
+            BuildingDataWrapper wrapper = JsonUtility.FromJson<BuildingDataWrapper>(buildingsJson);
+            buildings = wrapper.buildings ?? new List<BuildingData>();
+
+            TurnManager.Instance.turnCount = PlayerPrefs.GetInt("TurnCount");
+        }
+    }
+
+    public void ClearGameState()
+    {
+        PlayerPrefs.DeleteKey("Gold");
+        PlayerPrefs.DeleteKey("Food");
+        PlayerPrefs.DeleteKey("Population");
+        PlayerPrefs.DeleteKey("PopulationUsed");
+        PlayerPrefs.DeleteKey("Buildings");
+        PlayerPrefs.DeleteKey("TurnCount");
+        PlayerPrefs.DeleteKey(GameSaveKey);
     }
 }

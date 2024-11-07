@@ -1,69 +1,84 @@
+using System.Collections;
+using System.Collections.Generic;
 using UnityEngine;
-using UnityEngine.SceneManagement;
-using UnityEngine.UIElements;
+using UnityEngine.UI;
+using TMPro;
 
 public class CarpentersShopUI : MonoBehaviour
 {
-    private UIDocument menuDocument;
-    private Button buyMarket;
-    private Button buyFarm;
-    private Button buyHouse;
+    public Button buyMarket;
+    public Button buyFarm;
+    public Button buyHouse;
+    public Button pauseButton;
+    public Button unpauseButton;
+    public Button saveAndQuitButton;
 
-    private Button returnToMain;
+    public Button returnToMain;
+
+    public GameObject pauseMenu;
 
     public Building marketplacePrefab;
     public Building farmlandPrefab;
     public Building villageHousePrefab;
 
-    private void Awake()
-    {
-        menuDocument = GetComponent<UIDocument>();
-        buyHouse = menuDocument.rootVisualElement.Q("BuyHouse") as Button;
-        buyFarm = menuDocument.rootVisualElement.Q("BuyFarmLand") as Button;
-        buyMarket = menuDocument.rootVisualElement.Q("BuyMarketplace") as Button;
-        returnToMain = menuDocument.rootVisualElement.Q("ReturnToMain") as Button;
+    public TextMeshProUGUI goldText;
+    public TextMeshProUGUI foodText;
+    public TextMeshProUGUI popText;
 
-        buyMarket.RegisterCallback<ClickEvent>(BuyMarketplace);
-        buyFarm.RegisterCallback<ClickEvent>(BuyFarmLand);
-        buyHouse.RegisterCallback<ClickEvent>(BuyHouse);
-        returnToMain.RegisterCallback<ClickEvent>(ReturnToMain);
+
+    void Start()
+    {
+        buyMarket.onClick.AddListener(() => BuyBuilding(marketplacePrefab));
+        buyFarm.onClick.AddListener(() => BuyBuilding(farmlandPrefab));
+        buyHouse.onClick.AddListener(() => BuyBuilding(villageHousePrefab));
+        pauseButton.onClick.AddListener(ShowPauseMenu);
+        unpauseButton.onClick.AddListener(HidePauseMenu);
+
+        saveAndQuitButton.onClick.AddListener(SaveAndQuit);
+
+        returnToMain.onClick.AddListener(ReturnToMain);
+
+        HidePauseMenu();
     }
 
-    public void BuyMarketplace(ClickEvent click)
+    void Update()
     {
-        if (GameManager.Instance.gold >= marketplacePrefab.buildCost)
+        goldText.text = "Gold: " + GameManager.Instance.gold;
+        foodText.text = "Food: " + GameManager.Instance.food;
+        popText.text = "Pop: " + GameManager.Instance.population;
+    }
+
+    public void BuyBuilding(Building preFab)
+    {
+        if (TurnManager.Instance.actionsRemaining > 0 && GameManager.Instance.gold >= preFab.buildCost)
         {
-            Debug.Log("Buying Marketplace");
-            GameManager.Instance.SetBuildingToPlace(marketplacePrefab);
-            GameManager.Instance.AddResource(Constants.Gold, -marketplacePrefab.buildCost);
-            ReturnToMain(click);
+            TurnManager.Instance.UseAction();
+            GameManager.Instance.SetBuildingToPlace(preFab);
+            GameManager.Instance.AddResource(Constants.Gold, -preFab.buildCost);
+            ReturnToMain();
         }
     }
 
-    public void BuyFarmLand(ClickEvent click)
+    public void ReturnToMain()
     {
-        if (GameManager.Instance.gold >= farmlandPrefab.buildCost)
-        {
-            Debug.Log("Buying Farm Land");
-            GameManager.Instance.SetBuildingToPlace(farmlandPrefab);
-            GameManager.Instance.AddResource(Constants.Gold, -farmlandPrefab.buildCost);
-            ReturnToMain(click);
-        }
+        GameManager.Instance.LoadScene("Main Scene");
     }
 
-    public void ReturnToMain(ClickEvent click)
+    public void ShowPauseMenu()
     {
-        SceneManager.LoadScene("Main Scene");
+        Time.timeScale = 0;
+        pauseMenu.SetActive(true);
     }
 
-    public void BuyHouse(ClickEvent click)
+    private void HidePauseMenu()
     {
-        if (GameManager.Instance.gold >= villageHousePrefab.buildCost)
-        {
-            Debug.Log("Buying Village House");
-            GameManager.Instance.SetBuildingToPlace(villageHousePrefab);
-            GameManager.Instance.AddResource(Constants.Gold, -villageHousePrefab.buildCost);
-            ReturnToMain(click);
-        }
+        Time.timeScale = 1;
+        pauseMenu.SetActive(false);
+    }
+
+    private void SaveAndQuit()
+    {
+        GameManager.Instance.SaveGameState();
+        Application.Quit();
     }
 }
