@@ -7,18 +7,19 @@ using UnityEngine.UI;
 public class MainSceneUI : MonoBehaviour
 {
     public TextMeshProUGUI turnsText;
-    public Button endTurnButton;
 
     public TextMeshProUGUI messageText;
 
     public GameObject messagePanel;
 
-    private bool messageShowing = false;
+    public GameObject endTurnWarning;
+
+    private bool messageShowing;
 
     private void Start()
     {
-        endTurnButton.onClick.AddListener(TurnManager.Instance.EndTurn);
         messagePanel.SetActive(false);
+        endTurnWarning.SetActive(false);
     }
 
     void Update()
@@ -42,5 +43,22 @@ public class MainSceneUI : MonoBehaviour
         messagePanel.SetActive(false);
         messageShowing = false;
         GameManager.Instance.message = null;
+    }
+
+    public void EndTurnCheck()
+    {
+        if (GameManager.Instance.gold > 50 && TurnManager.Instance.actionsRemaining > 0)
+        {
+            endTurnWarning.SetActive(true);
+        } else
+        {
+            TurnManager.Instance.EndTurn();
+            endTurnWarning.SetActive(false);
+        }
+    }
+
+    public void DisableTurnWarning()
+    {
+        endTurnWarning.SetActive(false);
     }
 }

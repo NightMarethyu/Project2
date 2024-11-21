@@ -30,7 +30,7 @@ public class TurnManager : MonoBehaviour
         hasSentAdventurer = false;
     }
 
-    public void EndTurn()
+    public void EndTurnCheck()
     {
         if (GameManager.Instance.gold > 50 && actionsRemaining > 0)
         {
@@ -38,6 +38,12 @@ public class TurnManager : MonoBehaviour
             return;
         }
 
+        EndTurn();
+        
+    }
+
+    public void EndTurn() 
+    {
         if (turnCount == 0)
         {
             GameManager.Instance.EndGame();

@@ -9,14 +9,16 @@ public class GameManager : MonoBehaviour
 
     public int gold;
     public int food;
+    public int maxPopulation;
     public int population;
     public int populationUsed;
 
     public Building buildingToPlace;
     public List<Building> placedBuildings;
     public List<BuildingData> buildings;
+    public List<Building> buildingInventory;
 
-    public string message = null;
+    public string message;
 
     private const string HighScoreKey = "HighScore";
     private const string GameSaveKey = "GameSave";
@@ -31,6 +33,8 @@ public class GameManager : MonoBehaviour
 
         Instance = this;
         DontDestroyOnLoad(gameObject);
+
+        message = null;
     }
 
     // Access to buildingToPlace
@@ -99,6 +103,20 @@ public class GameManager : MonoBehaviour
         foreach (Building building in placedBuildings)
         {
             building.GenerateResources();
+            int houseCount = 0;
+            if (building is VillageHouse)
+            {
+                houseCount++;
+            }
+            maxPopulation = houseCount * 4;
+
+            if (population >= maxPopulation)
+            {
+                population = maxPopulation;
+            } else
+            {
+                population += Random.Range(0, maxPopulation - population);
+            }
         }
     }
 
@@ -120,35 +138,8 @@ public class GameManager : MonoBehaviour
             {
                 EndGame();
             }
-
-            AdjustBuildingPopulation();
         }
 
-    }
-
-    private void AdjustBuildingPopulation()
-    {
-        Debug.Log("Food Shortage, adjusting population");
-        int totalPopulationUsed = 0;
-
-        foreach (var building in placedBuildings)
-        {
-            if (building is VillageHouse house)
-            {
-                totalPopulationUsed += house.AdjustPopulationAfterFoodShortage(totalPopulationUsed);
-            }
-        }
-
-        int remainingPopulation = population - totalPopulationUsed;
-        foreach (var building in placedBuildings)
-        {
-            if (!(building is VillageHouse))
-            {
-                remainingPopulation -= building.AdjustPopulationAfterFoodShortage(remainingPopulation);
-            }
-        }
-
-        populationUsed = population - remainingPopulation;
     }
 
     public void LoadScene(string sceneName)

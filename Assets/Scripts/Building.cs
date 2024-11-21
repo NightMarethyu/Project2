@@ -33,13 +33,4 @@ public abstract class Building : MonoBehaviour
         }
     }
 
-    public virtual int AdjustPopulationAfterFoodShortage(int remainingPopulation)
-    {
-        if (populationUsed > remainingPopulation)
-        {
-            populationUsed = remainingPopulation;
-        }
-        return populationUsed;
-    }
-
 }
