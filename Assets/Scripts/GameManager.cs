@@ -7,17 +7,26 @@ public class GameManager : MonoBehaviour
 {
     public static GameManager Instance;
 
+    [Header("Game Scoring Variables")]
     public int gold;
     public int food;
     public int maxPopulation;
     public int population;
     public int populationUsed;
 
+    [Header("Building Control Variables")]
     public Building buildingToPlace;
     public List<Building> placedBuildings;
     public List<BuildingData> buildings;
     public List<Building> buildingInventory;
 
+    [Header("Current Adventure Variables")]
+    public int goldCount;
+    public int currentGoalProgress;
+    public Adventurer selectedAdventurer;
+    public bool returnedFromAdventure = false;
+
+    [Header("Main Game Information")]
     public string message;
 
     private const string HighScoreKey = "HighScore";
@@ -134,7 +143,7 @@ public class GameManager : MonoBehaviour
             population -= populationLoss;
             population = Mathf.Max(population, 0);
 
-            if (population == 0)
+            if (population <= 0)
             {
                 EndGame();
             }
@@ -145,6 +154,23 @@ public class GameManager : MonoBehaviour
     public void LoadScene(string sceneName)
     {
         SceneManager.LoadScene(sceneName);
+        if (sceneName.Equals("Main Scene"))
+        {
+            if (returnedFromAdventure)
+            {
+                StartCoroutine("WaitForSceneLoad");
+            }
+        }
+    }
+
+    private IEnumerator WaitForSceneLoad()
+    {
+        yield return new WaitForSeconds(1);
+        for (int i = 0; i < selectedAdventurer.turnCost; i++)
+        {
+            TurnManager.Instance.EndTurn();
+        }
+        returnedFromAdventure = false;
     }
 
     public void AddBuilding(Building building)

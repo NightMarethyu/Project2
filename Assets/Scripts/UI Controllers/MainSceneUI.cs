@@ -14,12 +14,19 @@ public class MainSceneUI : MonoBehaviour
 
     public GameObject endTurnWarning;
 
+    public Button confirmEarlyTurnEnd;
+
     private bool messageShowing;
 
     private void Start()
     {
         messagePanel.SetActive(false);
         endTurnWarning.SetActive(false);
+        confirmEarlyTurnEnd.onClick.AddListener(() =>
+        {
+            messagePanel.SetActive(false);
+            TurnManager.Instance.EndTurn();
+        });
     }
 
     void Update()

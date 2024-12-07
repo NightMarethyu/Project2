@@ -25,6 +25,11 @@ public class PlayerController : MonoBehaviour
 
     [Header("Movement Flags")]
     public bool isGrounded;
+    public bool isJumping;
+
+    [Header("Jump Speeds")]
+    public float jumpHeight = 3;
+    public float gravityIntensity = -15;
 
     private void Awake()
     {
@@ -33,11 +38,17 @@ public class PlayerController : MonoBehaviour
         animationControls = GetComponent<AnimationControls>();
         cameraManager = FindObjectOfType<CameraManager>();
         animator = GetComponent<Animator>();
+        isGrounded = true;
     }
 
     private void Update()
     {
         animationControls.UpdateAnimatorValues();
+        if (Input.GetKeyDown(KeyCode.Space))
+        {
+            isJumping = true;
+            HandleJumping();
+        }
     }
 
     private void FixedUpdate()
@@ -48,6 +59,7 @@ public class PlayerController : MonoBehaviour
     private void LateUpdate()
     {
         cameraManager.HandleAllCameraMovement();
+        animator.SetBool("isGrounded", isGrounded);
     }
 
     private void HandleAllMovement()
@@ -63,7 +75,6 @@ public class PlayerController : MonoBehaviour
 
     public void HandleMovement()
     {
-
         moveDirection = cameraObject.forward * Input.GetAxis("Vertical");
         moveDirection = moveDirection + cameraObject.right * Input.GetAxis("Horizontal");
         moveDirection.Normalize();
@@ -81,6 +92,7 @@ public class PlayerController : MonoBehaviour
 
     public void HandleRotation()
     {
+
         Vector3 targetDirection = Vector3.zero;
 
         targetDirection = cameraObject.forward * Input.GetAxis("Vertical");
@@ -101,7 +113,9 @@ public class PlayerController : MonoBehaviour
     {
         RaycastHit hit;
         Vector3 rayCastOrigin = transform.position;
+        Vector3 targetPosition;
         rayCastOrigin.y += rayCastHeightOffset;
+        targetPosition = transform.position;
 
         if (!isGrounded)
         {
@@ -113,20 +127,65 @@ public class PlayerController : MonoBehaviour
             inAirTimer += Time.deltaTime;
             playerRigidbody.AddForce(transform.forward * leapingVelocity);
             playerRigidbody.AddForce(Vector3.down * fallingVelocity * inAirTimer);
+
+            if (inAirTimer >= 5)
+            {
+                playerRigidbody.AddForce(Vector3.up * 15, ForceMode.Impulse);
+            }
         }
 
-        if (Physics.SphereCast(rayCastOrigin, 0.2f, -Vector3.up, out hit, groundLayer))
+        if (Physics.SphereCast(rayCastOrigin, 0.2f, Vector3.down, out hit, rayCastHeightOffset + 0.1f, groundLayer))
         {
             if (!isGrounded && !animator.GetBool("IsInteracting"))
             {
                 animationControls.PlayTargetAnimation("Land", true);
             }
 
-            inAirTimer = 0;
-            isGrounded = true;
+            if (!isJumping)
+            {
+                Vector3 rayCastHitPoint = hit.point;
+                targetPosition.y = rayCastHitPoint.y;
+                inAirTimer = 0;
+                isGrounded = true;
+                isJumping = false;
+            }
         } else
         {
             isGrounded = false;
+        }
+
+        if (isGrounded && !isJumping)
+        {
+            if (animator.GetBool("IsInteracting") || movementSpeed > 0)
+            {
+                playerRigidbody.MovePosition(Vector3.Lerp(transform.position, targetPosition, Time.deltaTime / 0.1f));
+            }
+            else
+            {
+                transform.position = targetPosition;
+            }
+        }
+
+        if (isJumping && playerRigidbody.velocity.y <= 0)
+        {
+            isJumping = false;
+        }
+    }
+
+    private void HandleJumping()
+    {
+        if (isGrounded)
+        {
+            isGrounded = false;
+            animationControls.animator.SetBool("isJumping", true);
+            animationControls.PlayTargetAnimation("Jump", false);
+
+            float jumpingVelocity = Mathf.Sqrt(-2 * gravityIntensity * jumpHeight);
+
+            Vector3 playerVelocity = moveDirection * movementSpeed;
+            playerVelocity.y = jumpingVelocity;
+
+            playerRigidbody.velocity = playerVelocity;
         }
     }
 }

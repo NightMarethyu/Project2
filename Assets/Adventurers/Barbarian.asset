@@ -13,10 +13,15 @@ MonoBehaviour:
   m_Name: Barbarian
   m_EditorClassIdentifier: 
   adventurerName: Thog Ironfist
-  minReward: 150
-  maxReward: 300
-  hireCost: 100
+  hireCostSimple: 70
+  hireCostAdvanced: 350
+  simpleRewardMin: 80
+  simpleRewardMax: 120
   flavorText: Thog's fury in battle is matched only by his appetite for roasted boar.
     His methods are brutal but effective; what he lacks in finesse, he makes up for
     with raw strength. Just don't ask him about strategy.
   adventurerPrefab: {fileID: 547481501683813555, guid: beaeaaf592f5ca644aee9e5f7d515fd3, type: 3}
+  playableAdventurer: {fileID: 8573483567304294019, guid: 1bf4862599ca9e0458d891455c7b54a1, type: 3}
+  outdoorSpawnPoint: {x: 114, y: 29.652, z: 87}
+  goalCount: 3
+  turnCost: 4

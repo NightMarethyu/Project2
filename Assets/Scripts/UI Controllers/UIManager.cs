@@ -36,12 +36,14 @@ public class UIManager : MonoBehaviour
     {
         Time.timeScale = 0;
         pauseMenu.SetActive(true);
+        
     }
 
     private void HidePauseMenu()
     {
         Time.timeScale = 1;
         pauseMenu.SetActive(false);
+        
     }
 
     private void SaveAndQuit()

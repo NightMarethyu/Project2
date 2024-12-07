@@ -8,6 +8,9 @@ public class CameraManager : MonoBehaviour
     public Transform cameraPivot;
     public Transform cameraTransform; // The transform of the actual camera object in the scene
     public LayerMask collisionLayers;
+
+    public AdventureUIManager uIManager;
+
     private float defaultPosition;
     private Vector3 cameraFollowVelocity = Vector3.zero;
     private Vector3 cameraVectorPosition;
@@ -25,9 +28,10 @@ public class CameraManager : MonoBehaviour
     public float minimumPivotAngle = -25;
     public float maximumPivotAngle = 45;
 
-    private void Awake()
+    private void Start()
     {
         targetTransform = FindObjectOfType<PlayerController>().transform;
+        uIManager = FindObjectOfType<AdventureUIManager>();
         cameraPivot = GameObject.Find("Camera Pivot").transform;
         cameraTransform = Camera.main.transform;
         defaultPosition = cameraTransform.localPosition.z;
@@ -35,6 +39,9 @@ public class CameraManager : MonoBehaviour
 
     public void HandleAllCameraMovement()
     {
+        if (uIManager.isPauseMenuActive)
+            return;
+
         FollowTarget();
         RotateCamera();
         HandleCameraCollisions();

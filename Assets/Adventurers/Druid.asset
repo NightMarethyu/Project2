@@ -13,10 +13,15 @@ MonoBehaviour:
   m_Name: Druid
   m_EditorClassIdentifier: 
   adventurerName: Willow Fernsinger
-  minReward: 100
-  maxReward: 250
-  hireCost: 75
+  hireCostSimple: 50
+  hireCostAdvanced: 200
+  simpleRewardMin: 60
+  simpleRewardMax: 100
   flavorText: A friend to all things green and wild, Willow can coax the secrets
     of the forest and bend nature to her will. She seeks harmony with nature, which
     sometimes means... unconventional solutions to problems. Birds flock to her call.
   adventurerPrefab: {fileID: 5255840939189630114, guid: 267525a934a6fa347ab34ebfc25d016a, type: 3}
+  playableAdventurer: {fileID: 693742160294329058, guid: 429762c4a72d1cb478396488d3f73298, type: 3}
+  outdoorSpawnPoint: {x: 137, y: 24.22949, z: 911}
+  goalCount: 2
+  turnCost: 3

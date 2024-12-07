@@ -20,4 +20,10 @@ EditorBuildSettings:
   - enabled: 1
     path: Assets/Scenes/Closing Scene.unity
     guid: 910bb56022c233c4399f43869945d404
+  - enabled: 1
+    path: Assets/Scenes/Adventures/OutdoorAdventure.unity
+    guid: a61aa73e1cefaad40ab15e37624a1929
+  - enabled: 1
+    path: Assets/Scenes/Adventures/DungeonInterior.unity
+    guid: 82635a14dbc33b1498e058c684974a67
   m_configObjects: {}

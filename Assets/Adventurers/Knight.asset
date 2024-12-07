@@ -13,10 +13,15 @@ MonoBehaviour:
   m_Name: Knight
   m_EditorClassIdentifier: 
   adventurerName: Sir Cedric Gallant
-  minReward: 200
-  maxReward: 400
-  hireCost: 120
+  hireCostSimple: 60
+  hireCostAdvanced: 300
+  simpleRewardMin: 70
+  simpleRewardMax: 110
   flavorText: Chivalrous and steadfast, Sir Cedric lives by a code of honor. He is
     known for his loyalty and noble heart but has a strict rule against taking shortcuts.
     Reliable in battle, Cedric fights for justice, glory, and occasionally, coin.
   adventurerPrefab: {fileID: 7498130571547991622, guid: 48b0fd46bacd15c49850fc764ff38881, type: 3}
+  playableAdventurer: {fileID: 3476336532108857173, guid: 6ab5bc844ec97214b998c8964132f2f9, type: 3}
+  outdoorSpawnPoint: {x: 707, y: 50.6347, z: 646}
+  goalCount: 3
+  turnCost: 4

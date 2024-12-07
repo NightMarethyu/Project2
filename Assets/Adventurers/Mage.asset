@@ -13,10 +13,15 @@ MonoBehaviour:
   m_Name: Mage
   m_EditorClassIdentifier: 
   adventurerName: Eldris the Veiled
-  minReward: 150
-  maxReward: 350
-  hireCost: 110
+  hireCostSimple: 75
+  hireCostAdvanced: 400
+  simpleRewardMin: 85
+  simpleRewardMax: 135
   flavorText: "Master of the arcane and guardian of ancient lore, Eldris weaves powerful
     spells with precision. A bit eccentric, perhaps, but her knowledge is invaluable...
     assuming she\u2019s not distracted by a new spellbook."
   adventurerPrefab: {fileID: 3337450054107587397, guid: 47d8d12eca7f3ff419489c2413c935f1, type: 3}
+  playableAdventurer: {fileID: 7500830672932530344, guid: 668ca3a3aaa3d9f43b2357a1c5df3aa4, type: 3}
+  outdoorSpawnPoint: {x: 677, y: 24, z: 98}
+  goalCount: 4
+  turnCost: 5

@@ -13,11 +13,16 @@ MonoBehaviour:
   m_Name: Rouge
   m_EditorClassIdentifier: 
   adventurerName: Shade Quickfingers
-  minReward: 100
-  maxReward: 300
-  hireCost: 90
+  hireCostSimple: 50
+  hireCostAdvanced: 250
+  simpleRewardMin: 60
+  simpleRewardMax: 100
   flavorText: "Shade thrives in the shadows, using agility and stealth to bypass
     traps and uncover secrets. She works best alone, preferring to \u2018liberate\u2019
     valuables without confrontation. If it\u2019s locked, Shade\u2019s already working
     on it."
   adventurerPrefab: {fileID: 1524739887765928984, guid: 93c8f27d3156fc64dae78a1698d89aa0, type: 3}
+  playableAdventurer: {fileID: 5078359694662635305, guid: 7140dc65a6e7bc548bf6908da7d4c4df, type: 3}
+  outdoorSpawnPoint: {x: 426, y: 1.115112, z: 626}
+  goalCount: 2
+  turnCost: 3

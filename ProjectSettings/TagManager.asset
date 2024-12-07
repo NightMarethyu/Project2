@@ -5,6 +5,12 @@ TagManager:
   serializedVersion: 2
   tags:
   - CameraPivot
+  - Origami
+  - QuestReward
+  - SkeletonWarriorAxe
+  - Enemy
+  - EnemyWeapon
+  - Castle
   layers:
   - Default
   - TransparentFX
@@ -14,9 +20,9 @@ TagManager:
   - UI
   - PauseRaycast
   - Player
-  - 
-  - 
-  - 
+  - Ground
+  - Invisible
+  - Interactable
   - 
   - 
   - 

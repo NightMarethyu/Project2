@@ -17,6 +17,7 @@ public class GuildHallUI : MonoBehaviour
     public Button leftButton;
     public Button rightButton;
     public Button sendOnQuestButton;
+    public Button sendOnControlledQuestButton;
     public Button returnToMain;
 
     public GameObject AdventurerModelPosition;
@@ -32,7 +33,8 @@ public class GuildHallUI : MonoBehaviour
 
         leftButton.onClick.AddListener(() => ChangeAdventurer(-1));
         rightButton.onClick.AddListener(() => ChangeAdventurer(1));
-        sendOnQuestButton.onClick.AddListener(SendOnQuest);
+        sendOnQuestButton.onClick.AddListener(() => SendOnQuest(true));
+        sendOnControlledQuestButton.onClick.AddListener(() => SendOnQuest(false));
         returnToMain.onClick.AddListener(ReturnToMain);
     }
 
@@ -50,8 +52,8 @@ public class GuildHallUI : MonoBehaviour
         currentModel = Instantiate(currentAdventurer.adventurerPrefab, AdventurerModelPosition.transform.position, AdventurerModelPosition.transform.rotation);
 
         nameText.text = currentAdventurer.adventurerName;
-        rewardsText.text = $"Rewards: {currentAdventurer.minReward} - {currentAdventurer.maxReward}";
-        costText.text = $"Cost: {currentAdventurer.hireCost}";
+        rewardsText.text = $"Quest Rewards:\nSimple Quest {currentAdventurer.simpleRewardMin} - {currentAdventurer.simpleRewardMax}\nAdvanced Quest: {currentAdventurer.goalCount} Fortunes";
+        costText.text = $"Adventurer Fees\nSimple Quest: {currentAdventurer.hireCostSimple}\nAdvanced Quest: {currentAdventurer.hireCostAdvanced}";
         flavorText.text = "Description: \n" + currentAdventurer.flavorText;
     }
 
@@ -67,9 +69,8 @@ public class GuildHallUI : MonoBehaviour
         UpdateAdventurerDisplay();
     }
 
-    private void SendOnQuest()
+    private void SendOnQuest(bool isSimple)
     {
-
         if (TurnManager.Instance.hasSentAdventurer)
         {
             StartCoroutine(DisplayWarningText(alreadySentAdventurer));
@@ -77,10 +78,12 @@ public class GuildHallUI : MonoBehaviour
         }
 
         Adventurer selectedAdventurer = adventurers[currentAdventurerIndex];
+
+        int curCost = isSimple ? selectedAdventurer.hireCostSimple : selectedAdventurer.hireCostAdvanced;
         // Debug.Log($"Adventurer {selectedAdventurer.adventurerName} is going on a quest!");
 
         // Check if player has enough gold to hire the adventurer
-        if (GameManager.Instance.gold < selectedAdventurer.hireCost)
+        if (GameManager.Instance.gold < curCost)
         {
             Debug.LogWarning("Not enough gold to hire this adventurer!");
             StartCoroutine(DisplayWarningText(warningText));
@@ -93,7 +96,8 @@ public class GuildHallUI : MonoBehaviour
         }
 
         // Deduct hire cost from player's gold
-        GameManager.Instance.gold -= selectedAdventurer.hireCost;
+        GameManager.Instance.gold -= curCost;
+        GameManager.Instance.selectedAdventurer = selectedAdventurer;
         TurnManager.Instance.hasSentAdventurer = true;
         TurnManager.Instance.UseAction();
 
@@ -101,7 +105,7 @@ public class GuildHallUI : MonoBehaviour
         currentModel.GetComponent<Animator>().SetTrigger("Send On Quest");
 
         // Start the coroutine to simulate quest time and reward
-        StartCoroutine(CompleteQuestAfterDelay(selectedAdventurer));
+        StartCoroutine(CompleteQuestAfterDelay(isSimple));
     }
 
     private void ReturnToMain()
@@ -110,18 +114,22 @@ public class GuildHallUI : MonoBehaviour
     }
 
     // Coroutine for quest delay and reward calculation
-    private IEnumerator CompleteQuestAfterDelay(Adventurer adventurer)
+    private IEnumerator CompleteQuestAfterDelay(bool isSimple)
     {
         // Delay to simulate quest time
         yield return new WaitForSeconds(3f); // Adjust delay as needed
 
-        // Calculate and add random reward to GameManager's gold
-        int reward = Random.Range(adventurer.minReward, adventurer.maxReward + 1);
-        GameManager.Instance.AddResource(Constants.Gold, reward);
-        GameManager.Instance.message = $"Adventurer {adventurer.adventurerName} returned with {reward} gold!";
-
-        // Load main scene after quest completion
-        GameManager.Instance.LoadScene("Main Scene");
+        // Check for simplicity and follow logic
+        if (isSimple)
+        {
+            int rewards = Random.Range(GameManager.Instance.selectedAdventurer.simpleRewardMin, GameManager.Instance.selectedAdventurer.simpleRewardMax + 1);
+            GameManager.Instance.message = $"{GameManager.Instance.selectedAdventurer.name} returned successfully. You recieved {rewards} gold!";
+            GameManager.Instance.gold += rewards;
+            GameManager.Instance.LoadScene("Main Scene");
+        } else
+        {
+            GameManager.Instance.LoadScene("OutdoorAdventure");
+        }
     }
 
     private IEnumerator DisplayWarningText(GameObject warning)

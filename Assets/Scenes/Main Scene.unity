@@ -4665,7 +4665,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 89d14230543e0584bbb4482c1eba0c2f, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  gold: 100
+  gold: 600
   food: 50
   maxPopulation: 0
   population: 3
@@ -4674,6 +4674,10 @@ MonoBehaviour:
   placedBuildings: []
   buildings: []
   buildingInventory: []
+  goldCount: 0
+  currentGoalProgress: 0
+  selectedAdventurer: {fileID: 0}
+  returnedFromAdventure: 0
   message: 
 --- !u!1001 &108908327
 PrefabInstance:
@@ -40895,10 +40899,10 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: f2e77f49ca436e641bd38ea1fee39bab, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  turnCount: 2
+  turnCount: 4
   maxActions: 3
   actionsRemaining: 0
-  hasSentAdventurer: 1
+  hasSentAdventurer: 0
 --- !u!4 &883825584
 Transform:
   m_ObjectHideFlags: 0
@@ -72544,9 +72548,9 @@ MonoBehaviour:
   m_OnClick:
     m_PersistentCalls:
       m_Calls:
-      - m_Target: {fileID: 883825583}
-        m_TargetAssemblyTypeName: TurnManager, Assembly-CSharp
-        m_MethodName: EndTurn
+      - m_Target: {fileID: 1796579080}
+        m_TargetAssemblyTypeName: MainSceneUI, Assembly-CSharp
+        m_MethodName: DisableTurnWarning
         m_Mode: 1
         m_Arguments:
           m_ObjectArgument: {fileID: 0}
@@ -72556,9 +72560,9 @@ MonoBehaviour:
           m_StringArgument: 
           m_BoolArgument: 0
         m_CallState: 2
-      - m_Target: {fileID: 1796579080}
-        m_TargetAssemblyTypeName: MainSceneUI, Assembly-CSharp
-        m_MethodName: DisableTurnWarning
+      - m_Target: {fileID: 883825583}
+        m_TargetAssemblyTypeName: TurnManager, Assembly-CSharp
+        m_MethodName: EndTurn
         m_Mode: 1
         m_Arguments:
           m_ObjectArgument: {fileID: 0}
@@ -79228,6 +79232,7 @@ MonoBehaviour:
   messageText: {fileID: 671215904}
   messagePanel: {fileID: 1341068789}
   endTurnWarning: {fileID: 824286293}
+  confirmEarlyTurnEnd: {fileID: 1651016228}
 --- !u!114 &1796579081
 MonoBehaviour:
   m_ObjectHideFlags: 0

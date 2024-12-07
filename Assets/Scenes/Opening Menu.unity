@@ -1710,7 +1710,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   m_Material: {fileID: 0}
-  m_Color: {r: 0.029529847, g: 0.509434, b: 0, a: 0.392}
+  m_Color: {r: 0.3433962, g: 0.29979032, b: 0, a: 0.9372549}
   m_RaycastTarget: 1
   m_RaycastPadding: {x: 0, y: 0, z: 0, w: 0}
   m_Maskable: 1
@@ -3514,7 +3514,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   m_Material: {fileID: 0}
-  m_Color: {r: 0.83962506, g: 1, b: 0.6245283, a: 0.392}
+  m_Color: {r: 0.3962264, g: 0.38498592, b: 0, a: 0.9254902}
   m_RaycastTarget: 1
   m_RaycastPadding: {x: 0, y: 0, z: 0, w: 0}
   m_Maskable: 1
@@ -3739,8 +3739,8 @@ MonoBehaviour:
   m_fontMaterials: []
   m_fontColor32:
     serializedVersion: 2
-    rgba: 4278793802
-  m_fontColor: {r: 0.2905661, g: 0.2103705, b: 0.036731932, a: 1}
+    rgba: 4286170342
+  m_fontColor: {r: 0.90188676, g: 0.7704652, b: 0.4747668, a: 1}
   m_enableVertexGradient: 0
   m_colorMode: 3
   m_fontColorGradient:
@@ -4616,7 +4616,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   m_Material: {fileID: 0}
-  m_Color: {r: 0.5471698, g: 0.5199146, b: 0.044392977, a: 0.67058825}
+  m_Color: {r: 0.3433962, g: 0.32476228, b: 0, a: 0.8862745}
   m_RaycastTarget: 1
   m_RaycastPadding: {x: 0, y: 0, z: 0, w: 0}
   m_Maskable: 1
@@ -5247,6 +5247,7 @@ MonoBehaviour:
   turnCount: 25
   maxActions: 5
   actionsRemaining: 0
+  hasSentAdventurer: 0
 --- !u!4 &1551343069
 Transform:
   m_ObjectHideFlags: 0
@@ -5547,11 +5548,17 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   gold: 150
   food: 50
+  maxPopulation: 0
   population: 4
   populationUsed: 0
   buildingToPlace: {fileID: 0}
   placedBuildings: []
   buildings: []
+  buildingInventory: []
+  goldCount: 0
+  currentGoalProgress: 0
+  selectedAdventurer: {fileID: 0}
+  returnedFromAdventure: 0
   message: 
 --- !u!4 &1627762186
 Transform:
